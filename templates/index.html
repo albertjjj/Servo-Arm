@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css"/>
+    <title>Home</title>
+</head>
+<style> 
+    .rangeslider{ 
+        width: 50%; 
+    } 
+    .myslider { 
+        -webkit-appearance: none; 
+        background: #FCF3CF  ; 
+        width: 50%; 
+        height: 20px; 
+        opacity: 2; 
+       } 
+    .myslider::-webkit-slider-thumb { 
+        -webkit-appearance: none; 
+        cursor: pointer; 
+        background: #34495E  ; 
+        width: 5%; 
+        height: 20px; 
+    } 
+    .myslider:hover { 
+        opacity: 1; 
+    } 
+</style>
+
+<body>
+    <form method = 'POST'>
+    <div class="rangeslider"> 
+        <input type="range" min="1" max="100" value="50" class="myslider" id="sliderRange"> 
+        <p>
+            <span id="demo"></span>
+        </p> 
+
+        <input type="range" min="1" max="100" value="50" class="myslider" id="sliderRange2"> 
+        <p>
+            <span id="demo2"></span>
+        </p> 
+    </div> 
+    
+    <input type="button" value="Grip" onclick="servoMax()">
+    <input type="button" value="Let Go" onclick="servoMin()">
+
+
+        <script> 
+            const Http = new XMLHttpRequest();
+            var rangeslider = document.getElementById("sliderRange"); 
+            var rangeslider2 = document.getElementById("sliderRange2"); 
+
+            var output = document.getElementById("demo"); 
+            var output2 = document.getElementById("demo2"); 
+
+            var current;                 
+            rangeslider.oninput = function() {
+
+                current = this.value;
+                if (current < 25){
+                    output.innerHTML = current;
+                    }
+                else if (current >= 25 && current <= 50){
+                    output.innerHTML = current;
+                }
+                else if (current > 50 && current < 75){
+                    output.innerHTML = current;
+                }
+                else if (current >= 75){
+                    output.innerHTML = current;
+                }
+                Http.open('POST', '/slider_update')
+                Http.send(current)
+            }
+
+            rangeslider2.oninput = function() {
+
+                current2 = this.value;
+                if (current2 < 25){
+                    output2.innerHTML = current2;
+                    }
+                else if (current2 >= 25 && current2 <= 50){
+                    output2.innerHTML = current2;
+                }
+                else if (current2 > 50 && current2 < 75){
+                    output2.innerHTML = current2;
+                }
+                else if (current2 >= 75){
+                    output2.innerHTML = current2;
+                }
+                Http.open('POST', '/slider_update2')
+                Http.send(current2)
+            }
+
+            function servoMax(){
+                position = 1
+                Http.open('POST', '/buttonUpdate')
+                Http.send(position)
+            }
+
+            function servoMin(){
+                position = 2
+                Http.open('POST', '/buttonUpdate')
+                Http.send(position)
+            }
+
+        </script> 
+    </form>
+</body>
+</html>
+
